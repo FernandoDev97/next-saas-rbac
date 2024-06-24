@@ -7,9 +7,9 @@
     "lint": "turbo lint"
   },
   "devDependencies": {
-    "turbo": "^2.0.4"
+    "turbo": "latest"
   },
-  "packageManager": "pnpm@8.15.6",
+  "packageManager": "pnpm@8.9.0",
   "engines": {
     "node": ">=18"
   }
