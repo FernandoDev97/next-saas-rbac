@@ -6,7 +6,7 @@ Este projeto contém todos os padrões necessários para configurar um SaaS mult
 
 ### Autenticação
 
-- [ ] Deve ser possível autenticar usando e-mail e senha;
+- [x] Deve ser possível autenticar usando e-mail e senha;
 - [ ] Deve ser capaz de autenticar usando conta Github;
 - [ ] Deverá ser possível recuperar a senha através do e-mail;
 - [ ] Deverá ser possível criar uma conta (e-mail, nome e senha);
