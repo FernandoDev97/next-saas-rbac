@@ -13,7 +13,7 @@ Este projeto contém todos os padrões necessários para configurar um SaaS mult
 
 ### Organizações
 
-- [ ] Deve ser capaz de criar uma nova organização;
+- [x] Deve ser capaz de criar uma nova organização;
 - [ ] Deve ser possível obter as organizações às quais o usuário pertence;
 - [ ] Deve ser capaz de atualizar uma organização;
 - [ ] Deve ser capaz de encerrar uma organização;
