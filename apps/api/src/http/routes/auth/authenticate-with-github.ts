@@ -1,4 +1,3 @@
-import { compare } from 'bcryptjs'
 import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import z from 'zod'
@@ -66,7 +65,71 @@ export async function authenticateWithGithub(app: FastifyInstance) {
 
       const githubUserData = await githubUserResponse.json()
 
-      console.log(githubUserData)
+      const {
+        id: githubId,
+        avatar_url: avatarUrl,
+        name,
+        email,
+      } = z
+        .object({
+          id: z.number().int(),
+          avatar_url: z.string().url(),
+          name: z.string().nullable(),
+          email: z.string().nullable(),
+        })
+        .parse(githubUserData)
+
+      if (email === null) {
+        throw new BadRequestError(
+          'Your Github account must have an email to authenticate.'
+        )
+      }
+
+      let user = await prisma.user.findUnique({
+        where: { email },
+      })
+
+      if (!user) {
+        user = await prisma.user.create({
+          data: {
+            name,
+            email,
+            avatarUrl,
+          },
+        })
+      }
+
+      let account = await prisma.account.findUnique({
+        where: {
+          provider_userId: {
+            provider: 'GITHUB',
+            userId: user.id,
+          },
+        },
+      })
+
+      if (!account) {
+        account = await prisma.account.create({
+          data: {
+            provider: 'GITHUB',
+            providerAccountId: String(githubId),
+            userId: user.id,
+          },
+        })
+      }
+
+      const token = await reply.jwtSign(
+        {
+          sub: user.id,
+        },
+        {
+          sign: {
+            expiresIn: '7d',
+          },
+        }
+      )
+
+      return reply.status(201).send({ token })
     }
   )
 }
